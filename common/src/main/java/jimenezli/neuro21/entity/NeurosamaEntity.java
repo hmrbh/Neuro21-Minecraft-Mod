@@ -4,6 +4,7 @@ import jimenezli.neuro21.entity.ai.goal.NeurosamaFamilyHurtByTargetGoal;
 import jimenezli.neuro21.handler.ItemHandler;
 import jimenezli.neuro21.handler.SoundHandler;
 import jimenezli.neuro21.util.NeurosamaType;
+import net.minecraft.client.resources.sounds.Sound;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -32,6 +33,8 @@ import java.util.List;
 
 public class NeurosamaEntity extends Animal {
     private int heartTime = this.random.nextInt(6000) + 6000;
+    private int slashTime = this.random.nextInt(600) + 50;
+    private boolean heartOrSlash = this.random.nextBoolean();
 
     protected NeurosamaType neurosamaType = NeurosamaType.NEUROSAMA;
 
@@ -73,11 +76,19 @@ public class NeurosamaEntity extends Animal {
         super.aiStep();
 
         if (!this.level.isClientSide && this.isAlive() && !this.isBaby()) {
-            if (--this.heartTime <= 0) {
-                this.playSound(this.getHeartSound(), 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
-                this.spawnAtLocation(ItemHandler.HEART.get());
-                this.heartTime = this.random.nextInt(6000) + 6000;
+            if(heartOrSlash) {
+                if (--this.heartTime <= 0) {
+                    this.playSound(this.getHeartSound(), 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
+                    this.spawnAtLocation(ItemHandler.HEART.get());
+                    this.heartTime = this.random.nextInt(6000) + 6000;
+                }
+            } else {
+                if (--this.slashTime <= 0) {
+                    this.playSound(this.getSlashSound(), 1.0F, 1.0F);
+                }
             }
+            this.heartOrSlash = this.random.nextBoolean();
+
             if (this.getPassengers().isEmpty()) {
                 List<Entity> nearbyEntities = this.level.getEntities(this, this.getBoundingBox().inflate(2.0, 1.0, 2.0));
                 for (Entity entity : nearbyEntities) {
@@ -96,6 +107,10 @@ public class NeurosamaEntity extends Animal {
 
     protected SoundEvent getHeartSound() {
         return SoundHandler.NEUROSAMA_HEART.getOrNull();
+    }
+
+    protected SoundEvent getSlashSound(){
+        return SoundHandler.NEUROSAMA_SLASH.getOrNull();
     }
 
     public void readAdditionalSaveData(CompoundTag compoundTag) {
