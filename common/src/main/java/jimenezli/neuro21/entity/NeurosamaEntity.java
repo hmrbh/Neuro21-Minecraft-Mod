@@ -4,6 +4,7 @@ import jimenezli.neuro21.entity.ai.goal.NeurosamaFamilyHurtByTargetGoal;
 import jimenezli.neuro21.handler.ItemHandler;
 import jimenezli.neuro21.handler.SoundHandler;
 import jimenezli.neuro21.util.NeurosamaType;
+import net.minecraft.client.resources.sounds.Sound;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -73,11 +74,13 @@ public class NeurosamaEntity extends Animal {
         super.aiStep();
 
         if (!this.level.isClientSide && this.isAlive() && !this.isBaby()) {
+
             if (--this.heartTime <= 0) {
                 this.playSound(this.getHeartSound(), 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
                 this.spawnAtLocation(ItemHandler.HEART.get());
                 this.heartTime = this.random.nextInt(6000) + 6000;
             }
+
             if (this.getPassengers().isEmpty()) {
                 List<Entity> nearbyEntities = this.level.getEntities(this, this.getBoundingBox().inflate(2.0, 1.0, 2.0));
                 for (Entity entity : nearbyEntities) {

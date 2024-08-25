@@ -2,6 +2,7 @@ package jimenezli.neuro21.handler;
 
 import dev.architectury.registry.registries.RegistrySupplier;
 import jimenezli.neuro21.util.DiscNames;
+import net.minecraft.client.resources.sounds.Sound;
 import net.minecraft.sounds.SoundEvent;
 
 import static jimenezli.neuro21.Neuro21Mod.SOUND_EVENTS;
