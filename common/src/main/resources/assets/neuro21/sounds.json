@@ -3,7 +3,8 @@
     "sounds": [
       "neuro21:neurosama_ambient_1",
       "neuro21:neurosama_ambient_2",
-      "neuro21:neurosama_ambient_3"
+      "neuro21:neurosama_ambient_3",
+      "neuro21:neurosama_slash"
     ],
     "subtitle": "subtitles.neuro21.neurosama_ambient"
   },
